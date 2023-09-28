@@ -1,0 +1,105 @@
+<div class="users-page mt-4 p-3">
+    <div class="row search-container mb-3">
+        <div class="col-sm-3 text-start">
+            <h2>User</h2>
+        </div>
+        <div class="col-sm-9">
+            <input class="search-text" placeholder="Search..." (input)="onChangeSearchText($event)"/>
+            <button class="btn-actions" data-bs-toggle="modal" data-bs-target="#addOrEditUserDialog" (click)="handleAddUser()">Add User</button>
+        </div>
+    </div>
+    <!-- <div class="sort-container mt-4">
+        <select class="sort">
+            <option value="az">A-Z</option>
+            <option value="za">Z-A</option>
+            <option value="za">Gender</option>
+        </select>
+    </div> -->
+    <div class="messages mb-2" *ngIf="message || errorMsg">
+        <div class="mb-0 p-1 row" [ngClass]="{'success': !errorMsg, 'fail': errorMsg}">
+            <p class="mb-0 col-10">{{message || errorMsg}}</p>
+            <p class="mb-0 col-2 text-end btn-close-msg" (click)="message = ''">X</p>
+        </div>
+    </div>
+    <div class="users-table" *ngIf="users">
+        <table class="table">
+            <thead>
+                <tr scope="col">
+                    <th scope="col">No.</th>
+                    <th scope="col">Full name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users; index as i">
+                    <td data-th="No."><div>{{user.id}}</div></td>
+                    <td data-th="Full name"><div>{{user.name}}</div></td>
+                    <td data-th="Age"><div>{{user.age}}</div></td>
+                    <td data-th="Gender"><div>{{user.gender}}</div></td>
+                    <td data-th="Company"><div>{{user.company}}</div></td>
+                    <td data-th="Email"><div>{{user.email}}</div></td>
+                    <td>
+                        <div class="row">
+                            <div class="col-sm-6 text-end">
+                                <button class="btn-actions" (click)="handleEdit(user)" 
+                                        data-bs-toggle="modal" data-bs-target="#addOrEditUserDialog">Edit</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn-actions" data-bs-toggle="modal" data-bs-target="#deleteUserModal" (click)="deleteUser(user)">Delete</button></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination-container text-end">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination float-end">
+                    <li class="page-item" (click)="previousPage()" [ngClass]="{'disabled': currentPage == 1}">
+                        <p class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </p>
+                    </li>
+                    <li class="page-item" *ngFor="let n of pages; index as i" (click)="processPaging(n)">
+                        <p class="page-link" href="#">{{n}}</p>
+                    </li>
+                    <li class="page-item" (click)="nextPage()" [ngClass]="{'disabled': currentPage == pages.length}">
+                        <p class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        </p>
+                    </li>
+                </ul>
+              </nav>
+        </div>
+    </div>
+
+    <app-add-edit-user 
+        [user]="user" 
+        [users]="initialUsersList" 
+        [editUser]="editUser"
+        (message)="getMessage($event)">
+    </app-add-edit-user>
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete it?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="handleDeleteUser()">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeDeleteUserModal>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

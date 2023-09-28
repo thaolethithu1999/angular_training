@@ -1,0 +1,78 @@
+
+<div class="modal fade" id="addOrEditUserDialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{editUser ? 'Edit Information' : 'Add Information' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="errorMsg" class="error">
+                    <p>{{errorMsg}}</p>
+                </div>
+                <form *ngIf="user" [formGroup]="userForm">
+                    <div class="row">
+                        <div class="col-sm-3">Id</div>
+                        <div class="col-sm-9">
+                            <input *ngIf="user" class="editable" [defaultValue]="user.id" formControlName="id" type="text" readonly/>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">Full name</div>
+                        <div class="col-sm-9">
+                            <input *ngIf="user" class="editable" [defaultValue]="user.name" formControlName="name" type="text"/>
+                            <div *ngIf="userForm.get('name')?.hasError('required') && userForm.get('name')?.touched">
+                                Full name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">Age</div>
+                        <div class="col-sm-9">
+                            <input class="editable" [defaultValue]="user.age" formControlName="age" type="number"/>
+                            <div *ngIf="userForm.get('age')?.hasError('required') && userForm.get('age')?.touched">
+                                Age is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">Gender</div>
+                        <div class="col-sm-9">
+                            <select formControlName="gender" class="editable" [value]="user.gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <div *ngIf="userForm.get('gender')?.hasError('required') && userForm.get('gender')?.touched">
+                                Gender is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">Company</div>
+                        <div class="col-sm-9">
+                            <input class="editable" [defaultValue]="user.company" formControlName="company" type="text"/>
+                            <div *ngIf="userForm.get('company')?.hasError('required') && userForm.get('company')?.touched">
+                                Company is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-3">Email</div>
+                        <div class="col-sm-9">
+                            <input class="editable" [defaultValue]="user.email" formControlName="email" type="email"/>
+                            <div *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.touched">
+                                Email is required.
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="handleUpdateUserInfo()">
+                    {{editUser ? 'Update' : 'Add'}}
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closeModal id="btn-close-modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
