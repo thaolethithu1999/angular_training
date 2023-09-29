@@ -1,5 +1,5 @@
 
-<div class="modal fade" id="addOrEditUserDialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addOrEditUserDialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #addOrEditUserDialog>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,24 +14,24 @@
                     <div class="row">
                         <div class="col-sm-3">Id</div>
                         <div class="col-sm-9">
-                            <input *ngIf="user" class="editable" [defaultValue]="user.id" formControlName="id" type="text" readonly/>
+                            <input *ngIf="user" class="editable"  formControlName="id" type="text" readonly/>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-3">Full name</div>
                         <div class="col-sm-9">
-                            <input *ngIf="user" class="editable" [defaultValue]="user.name" formControlName="name" type="text"/>
-                            <div *ngIf="userForm.get('name')?.hasError('required') && userForm.get('name')?.touched">
-                                Full name is required.
+                            <input *ngIf="user" class="editable" formControlName="name" type="text"/>
+                            <div *ngIf="userForm.get('name')?.invalid && (userForm.get('name')?.dirty || userForm.get('name')?.touched)" class="error-text">
+                                <div *ngIf="userForm.get('name')?.errors?.['required']">Full name is required</div>
                             </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-3">Age</div>
                         <div class="col-sm-9">
-                            <input class="editable" [defaultValue]="user.age" formControlName="age" type="number"/>
-                            <div *ngIf="userForm.get('age')?.hasError('required') && userForm.get('age')?.touched">
-                                Age is required.
+                            <input class="editable" formControlName="age" type="number"/>
+                            <div *ngIf="userForm.get('age')?.invalid && (userForm.get('age')?.dirty || userForm.get('age')?.touched)" class="error-text">
+                                <div *ngIf="userForm.get('age')?.errors?.['required']">Age is required</div>
                             </div>
                         </div>
                     </div>
@@ -42,26 +42,24 @@
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
-                            <div *ngIf="userForm.get('gender')?.hasError('required') && userForm.get('gender')?.touched">
-                                Gender is required.
-                            </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-3">Company</div>
                         <div class="col-sm-9">
-                            <input class="editable" [defaultValue]="user.company" formControlName="company" type="text"/>
-                            <div *ngIf="userForm.get('company')?.hasError('required') && userForm.get('company')?.touched">
-                                Company is required.
+                            <input class="editable" formControlName="company" type="text"/>
+                            <div *ngIf="userForm.get('company')?.invalid && (userForm.get('company')?.dirty || userForm.get('company')?.touched)" class="error-text">
+                                <div *ngIf="userForm.get('company')?.errors?.['required']">Company is required</div>
                             </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-3">Email</div>
                         <div class="col-sm-9">
-                            <input class="editable" [defaultValue]="user.email" formControlName="email" type="email"/>
-                            <div *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.touched">
-                                Email is required.
+                            <input class="editable" formControlName="email" type="email"/>
+                            <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="error-text">
+                                <div *ngIf="userForm.get('email')?.errors?.['required']">Email is required</div>
+                                <div *ngIf="userForm.get('email')?.errors?.['email']">Email is invalid</div>
                             </div>
                         </div>
                     </div>

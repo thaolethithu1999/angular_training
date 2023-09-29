@@ -1,0 +1,10 @@
+{
+  "name": "ez-state",
+  "version": "1.0.2",
+  "peerDependencies": {
+    "ez-functions": "1.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}

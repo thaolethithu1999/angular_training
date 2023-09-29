@@ -18,7 +18,7 @@ export class UsersComponent implements OnInit {
   addUser: boolean;
   message: string;
   errorMsg: string;
-  getUsersList = new Subject<void>();
+  destroy$: Subject<void> = new Subject();
   numberOfPages: number = 1;
   itemsPerPage: number = 5;
   currentPage: number = 1;
@@ -33,14 +33,15 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.getUsersList.next();
-    this.getUsersList.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getUsers(): void {
-    this.apiService.getUsers().pipe(takeUntil(this.getUsersList)).subscribe((res) => {
+    this.apiService.getUsers().pipe(takeUntil(this.destroy$)).subscribe((res) => {
       this.initialUsersList = res;
       this.users = res;
+      this.editUser = false;
       this.numberOfPages = Math.ceil(this.users.length / this.itemsPerPage);
       this.pages = this.range(1, this.numberOfPages);
       this.processPaging();
@@ -73,8 +74,6 @@ export class UsersComponent implements OnInit {
 
     if(searchString) {
       let resultList: User[] = [];
-      console.log(this.users);
-      
       this.users = this.initialUsersList.forEach((user: User) => {
         if(user.age.toString().includes(searchString) || user.name.toLowerCase().includes(searchString) ||
           user.gender.toLowerCase().includes(searchString) || user.company.toLowerCase().includes(searchString) ||
@@ -82,7 +81,6 @@ export class UsersComponent implements OnInit {
             resultList.push(user);
         }
       }); 
-      
       this.users = resultList;
     } else {
       this.users = this.initialUsersList;
@@ -90,33 +88,14 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  handleEdit(item: User): void {
-    this.editUser = true;
-    this.user = cloneDeep(item);
-    console.log(this.user);
-    
-  }
-
-  handleAddUser(): void {
-    this.addUser = true;
-    this.editUser = false;
-    // this.user = {
-    //   "id": this.initialUsersList.length + 1,
-    //   "age": 0,
-    //   "name": '',
-    //   "gender": 'male',
-    //   "company": '',
-    //   "email": ''
-    // }
-  }
-
-  getMessage(msg: string): void {
-    this.message = msg;
-    this.getUsers();
-  }
-
-  handleCloseMsg(): void {
-    this.message = '';
+  getMessage(): void {
+    this.apiService.getMessage().pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      console.log({res});
+      if(res) {
+        this.message = res;
+        this.getUsers();
+      }
+    });
   }
 
   deleteUser(user: User) {

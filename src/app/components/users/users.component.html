@@ -5,16 +5,10 @@
         </div>
         <div class="col-sm-9">
             <input class="search-text" placeholder="Search..." (input)="onChangeSearchText($event)"/>
-            <button class="btn-actions" data-bs-toggle="modal" data-bs-target="#addOrEditUserDialog" (click)="handleAddUser()">Add User</button>
+            <button class="btn-actions" ata-bs-toggle="modal" data-bs-target="#deleteUserModal" 
+                    (click)="editDialog.openAddUser(initialUsersList.length); getMessage(); message = ''">Add User</button>
         </div>
     </div>
-    <!-- <div class="sort-container mt-4">
-        <select class="sort">
-            <option value="az">A-Z</option>
-            <option value="za">Z-A</option>
-            <option value="za">Gender</option>
-        </select>
-    </div> -->
     <div class="messages mb-2" *ngIf="message || errorMsg">
         <div class="mb-0 p-1 row" [ngClass]="{'success': !errorMsg, 'fail': errorMsg}">
             <p class="mb-0 col-10">{{message || errorMsg}}</p>
@@ -45,7 +39,7 @@
                     <td>
                         <div class="row">
                             <div class="col-sm-6 text-end">
-                                <button class="btn-actions" (click)="handleEdit(user)" 
+                                <button class="btn-actions" (click)="editDialog.openEditUser(user); getMessage(); message = ''" 
                                         data-bs-toggle="modal" data-bs-target="#addOrEditUserDialog">Edit</button>
                             </div>
                             <div class="col-sm-6">
@@ -77,12 +71,7 @@
         </div>
     </div>
 
-    <app-add-edit-user 
-        [user]="user" 
-        [users]="initialUsersList" 
-        [editUser]="editUser"
-        (message)="getMessage($event)">
-    </app-add-edit-user>
+    <app-add-edit-user #editDialog></app-add-edit-user>
 
     <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="exampModalLabel" aria-hidden="true">
         <div class="modal-dialog">

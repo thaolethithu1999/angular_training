@@ -3,6 +3,7 @@ import { User } from 'src/app/services/model/user';
 import { ApiService } from 'src/app/services/services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-add-edit-user',
@@ -11,16 +12,13 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class AddOrEditUserDialogComponent implements OnInit {
   @ViewChild('closeModal') closeModal: ElementRef<any>;
-  @Input() user: User;
-  @Input() editUser: boolean;
-  @Input() users: User[];
-
   @Output() message = new EventEmitter<string>();
 
+  editUser: boolean = false;
   errorMsg: string;
-  updateUser = new Subject<void>();
-  addUser = new Subject<void>();
+  destroy$: Subject<void> = new Subject();
   userForm: FormGroup;
+  user: User;
 
   constructor(private apiService: ApiService,
     private fb: FormBuilder) { 
@@ -34,70 +32,59 @@ export class AddOrEditUserDialogComponent implements OnInit {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log({changes});
-      this.user = changes['user'] ? changes['user'].currentValue : {};
-      this.editUser = changes['editUser'] ? changes['editUser'].currentValue : this.editUser;
-      this.users = changes['users'] ? changes['users'].currentValue : {};
-      this.updateValueUserForm();
+  openDialog(): void {
+    this.userForm.setValue({
+      id: this.user?.id,
+      age: this.user?.age,
+      name: this.user?.name,
+      gender: this.user?.gender,
+      company: this.user?.company,
+      email: this.user?.email
+    });
+  }
+
+  openAddUser(usersLength: number): void {
+    this.editUser = false;
+    this.user = {
+      id: usersLength + 1,
+      age: 0,
+      name: '',
+      gender: 'male',
+      company: '',
+      email: ''
+    };
+    this.userForm.reset();
+    this.openDialog();
+  }
+
+  openEditUser(user: User): void {
+    this.editUser = true;
+    this.user = user;
+    this.openDialog();
   }
 
   ngOnInit(): void {
-    this.updateValueUserForm();
   }
 
   ngOnDestroy(): void {
-    this.updateUser.next();
-    this.addUser.next();
-
-    this.updateUser.complete();
-    this.addUser.complete();
-  }
-
-  updateValueUserForm(): void {
-    if(this.editUser) {
-      this.userForm.setValue({
-        id: this.user.id,
-        age: this.user.age,
-        name: this.user.name,
-        gender: this.user.gender,
-        company: this.user.company,
-        email: this.user.email
-      });
-    } else {
-      console.log(this.users);
-      
-      this.userForm.setValue({
-        id: this.user ? this.users.length + 1 : 0,
-        age: 0,
-        name: '',
-        gender: 'male',
-        company: '',
-        email: ''
-      });
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   handleUpdateUserInfo(): void {
-    // console.log(this.user);
-    console.log(this.userForm.value);
-    
-    const data: User = this.userForm.value;
-    // console.log({data});
-    
-    // if(this.editUser) {
-    //   this.apiService.updateUser(data).pipe(takeUntil(this.updateUser)).subscribe(() => {
-    //     this.message.emit("Updated succesfully!");
-    //   });
-    // } else {
-    //   this.apiService.addUser(data).pipe(takeUntil(this.addUser)).subscribe(() => {
-    //     this.message.emit("Added succesfully!");
-    //   });
-    // }
-    // this.closeModal.nativeElement.click();
+    if (this.userForm.valid) {
+      const data: User = this.userForm.value;
+      if(this.editUser) {
+        this.apiService.updateUser(data).pipe(takeUntil(this.destroy$)).subscribe(() => {
+          this.apiService.setMessage('Updated succesfully!');
+        });
+      } else {
+        this.apiService.addUser(data).pipe(takeUntil(this.destroy$)).subscribe(() => {
+          this.apiService.setMessage('Added succesfully!');
+        });
+      }
+      this.closeModal.nativeElement.click();
+    } 
   }
-
-
-
 
 }

@@ -10,6 +10,24 @@ import { ApiService } from './services/services';
 import { FormsModule } from '@angular/forms';
 import { AddOrEditUserDialogComponent } from './components/add-edit-user/add-edit-user.component';
 import { ReactiveFormsModule } from '@angular/forms';
+// import {
+//   EzCheckboxesModule,
+//   EzCheckboxModule,
+//   EzFormsModule,
+//   EzModalModule,
+//   EzPasswordModule,
+//   EzRadioModule,
+//   EzSelectModule,
+//   EzTableModule,
+//   EzTabsModule,
+//   EzTextModule,
+//   EzYesNoModule,
+//   SameValidatorModule,
+// } from '../app/services/ngx-ez';
+import { EzFormsModule, } from '../app/services/ngx-ez/ngx-ez/src/lib/ez-forms/ez-forms.module';
+import { EzModalModule } from '../app/services/ngx-ez/ngx-ez/src/lib/ez-modal/ez-modal.module';
+import { UsersWithNgxEzComponent } from './components/users-with-ngx-ez/users-with-ngx-ez.component';
+import { EzColumnComponent, EzTableComponent, EzTableModule, EzTablePagerComponent, EzTableSearchComponent,  } from './services/ngx-ez/ngx-ez/src/public-api';
 
 @NgModule({
   declarations: [
@@ -17,14 +35,22 @@ import { ReactiveFormsModule } from '@angular/forms';
     MenuComponent,
     UsersComponent,
     RolesComponent,
-    AddOrEditUserDialogComponent
+    AddOrEditUserDialogComponent,
+    UsersWithNgxEzComponent,
+    // EzTableComponent,
+    // EzTableSearchComponent,
+    // EzColumnComponent,
+    // EzTablePagerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    EzFormsModule,
+    EzModalModule,
+    EzTableModule
   ],
   providers: [
     ApiService 
